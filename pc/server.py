@@ -21,16 +21,17 @@ if __name__ == '__main__':
     print("Connection from: " + str(addr))
 
     while(True):
+        #получаем изображение
         data = protocol.recv(conn)
+        #декодируем 
         image = handler.decode_recv(data)
+        #обрабатываем
         image_w_m=handler.image_warp(image)
-        #warp_line=handler.draw_line(image_w)
-        #cv2.imshow('image warp line',warp_line)
+    
         cv2.imshow('image warp mask',image_w_m)
-        #cv2.imshow('image original',image)
-        #key = getch()
-        #send_data=process_send(key)
+        #кодируем
         send_data = base64.b64encode('success'.encode('utf-8'))
+        #отправляем
         protocol.send(conn, send_data)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
